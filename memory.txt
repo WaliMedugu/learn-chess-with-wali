@@ -1,0 +1,1127 @@
+Learn Chess with Wali - Feature Memory
+
+Initial Setup:
+- Created Flutter project targeting Android.
+- Added packages:
+  - `chess` (rules engine and move validation)
+  - `flutter_svg` (for rendering crisp, lightweight vector pieces)
+  - `provider` (state management)
+  - `chess_vectors_flutter` (high-quality scalable SVG pieces)
+
+Implemented Features:
+1. High-Performance Chess Engine Logic:
+   - Full legal move validation (castling, en passant, promotion, checkmate, stalemate, draw).
+   - Play modes: VS Computer (AI) and Local Pass & Play.
+   - 3 AI difficulty levels: Easy (depth 1), Medium (depth 2), Hard (depth 3) using Minimax with alpha-beta pruning, move sorting, and positional piece-square tables.
+2. Premium UI/UX:
+   - Modern, sleek dark mode theme with glassmorphic elements.
+   - 3 Customizable board themes: Classic Emerald, Sleek Charcoal, Ocean Blue.
+   - Visual move hints: highlight selected piece, show dots on empty legal destination squares, show rings on capture squares, highlight the last move played.
+   - Scorecards tracking captured pieces and score advantage.
+   - Move history with rollback FEN history.
+   - Game controls: Undo move, Restart, Flip board.
+   - Beautiful, fully integrated Settings panel (Game Mode, Difficulty, Color selection, Board Themes).
+   - Pawn promotion dialog supporting selection of Queen, Rook, Bishop, or Knight.
+
+Arguuu UI/UX Copy Modifications:
+- Copied and registered 46 custom font OTF assets (Anthropic Serif, Anthropic Sans, Anthropic Mono) from the Arguuu app.
+- Created `lib/theme_arguuu.dart` replicating the complete Arguuu design tokens:
+  - `AppColors` palette (cream, cottonWhite, sand, terracotta, copper, rust, brown, darkWood, textMain, textLight, ink, win/loss colors).
+  - `AppFonts` utility getters.
+  - `ArguuuCard` container widget.
+  - `ArguuuButton` rounded outline/solid button widget.
+  - `ArguuuConfirmDialog` custom dialog with alert circle icon.
+- Applied Arguuu design copy to Chess interface:
+  - Overhauled MaterialApp theme and background to use Arguuu's warm dark wood color (`0xFF1F1B18`).
+  - Mapped Chessboard theme square colors to match AppColors (cream, sand, brown, copper).
+  - Replaced player scorecards with custom styled `ArguuuCard`s.
+  - Styled title text to use the italic `Anthropic Serif` and labels to use `Anthropic Mono`.
+  - Rebuilt action control buttons to use the precise outline borders, margins, and mono text styles from Arguuu.
+  - Swapped default alert dialogs with `ArguuuConfirmDialog` for restart and confirm prompts.
+  - Upgraded settings bottom sheet to match Arguuu's rounded top corners (32), cream background, and sand-colored drag handle.
+
+Light-Mode & Minimalist Overhaul:
+- Disabled dark mode completely; set up strict light theme using Arguuu's cream background (`0xFFFAF6F0`) and cottonWhite/ink palette.
+- Removed title bar, app headers, and "CHESS WALI" titles to achieve a clean full-screen minimal view.
+- Removed player scorecards/cards (vs AI rows) and turn status banners.
+- Created `StripedSquarePainter` and `StripedSquareWidget` to render high-quality diagonal stripes dynamically on all dark squares, replicating the user's uploaded board.
+- Updated the control bar to display exactly three buttons: Undo, Settings, and Resign (with a solid flag icon).
+- Integrated confirmation and game over flows using the native `ArguuuConfirmDialog` triggered upon user resignation or checkmate/stalemate/draw states.
+- Configured the default board theme (`BoardTheme.terracotta`) to match the uploaded screenshot exactly: light squares are cream (`AppColors.cream`), dark squares are warm sand (`AppColors.sand` `#E8DDD0`) with soft diagonal cream stripes, and move/selection highlights use the orangish clay color (`AppColors.copper` `#C4724A` with opacity).
+- Renamed the coach to Solomon and isolated the Solomon vertical profile pic, buttons, and speech bubble row strictly to the Play view (board screen).
+- Implemented a first-launch lay-onboarding skill level selector popup overlay screen that can't be dismissed, offering options (with simplified lay descriptions and no numbers/circles) for starting levels: Never played before (400), Just started learning (800), Play casually (1200), and Experienced player (1600).
+- Configured immediate transition to the Play screen setup against Prof. Solomon at the corresponding ELO difficulty level upon selector confirmation.
+- Renamed the app to "Chess with Prof. Solomon".
+- Integrated a standard chess ELO rating calculation algorithm (K=32 factor) operating against Solomon's difficulty ratings (from beginner 600 to Prof. Solomon 2700 ELO).
+- Added real stats tracking (Elo, Games, Win Rate) and a complete Game History log card to the Home screen (replacing Solomon's static records).
+- Implemented an interactive Game Review Mode enabling users to select any past match from the history and review moves using step-back (←), step-forward (→), and close (✖) exit controls under Solomon's guided speech bubble hints.
+- Configured complete match state persistence using SharedPreferences so the board position, FEN state, configs, ELO, undo history, and game history list are preserved and reloaded seamlessly even after phone restarts or app closures.
+- Moved difficulty configurations to the 3-dots sheet, expanding choices to 8 options {beginner, strong beginner, intermediate, strong intermediate, advanced, strong advanced, expert, Prof. Solomon}.
+- Overhauled Solomon's dialogue deck using the 200 chess-themed lines, adding precise board-state validators (checking castling, undeveloped knights, early queen movement, pawn structure space claims, captures, checks, hanging pieces, and endgame stages) to prevent off-context remarks and ensure all comments match current board status.
+- Increased Prof. Solomon's artificial thinking response delay to 2500ms so players have enough time to read his comment about their move before he plays and makes his reply.
+- Upgraded the coach dialogue section to render two separate speech bubbles (one for the current comment and one for the previous comment) stacked vertically in a scrollable column next to Solomon's photo.
+- Renamed the app to "Learn Chess with Sol" across MaterialApp titles and AndroidManifest configuration settings.
+- Copied, registered, and integrated the custom user logo ("assets/logo.jpg") as a premium circular logo UI block at the top of the onboarding screen and the Home screen header.
+- Added and configured `flutter_launcher_icons` tool to overwrite default Android launcher icons with the custom app logo.
+- Configured Android build gradle gradle.kts ndkVersion to "27.0.12077973" to satisfy shared_preferences compile dependencies.
+- Added an "Adjust Level" action option to the 3-dot bottom sheet menu on the Play view, launching a modal sheet to tune Solomon's difficulty.
+
+App Logo Update:
+- Replaced default logo ("assets/logo.jpg") with the new green modern fitness app logo ("assets/logo.png") copied from the user's Downloads directory.
+- Updated references in `pubspec.yaml` and `lib/main.dart` from `assets/logo.jpg` to `assets/logo.png`.
+- Added adaptive icon support to avoid squarish icons. Created a transparent foreground icon ("assets/logo_foreground.png") by keying out the `#FAF6F0` background color from "assets/logo.png" using a custom C# / PowerShell script.
+- Configured `flutter_launcher_icons` in `pubspec.yaml` to generate adaptive icons with `#FAF6F0` background and "assets/logo_foreground.png" foreground.
+- Re-ran `flutter_launcher_icons` to update the launcher icons on Android/iOS.
+- Deleted the old `assets/logo.jpg` file.
+ICAD Website Scraped:
+- Scraped the entire https://icad.org.ng/ website offline from Wayback Machine CDX archives.
+- Downloaded core assets (HTML, CSS, JS, images, fonts) and fully rewrote paths to allow complete offline browsing.
+- Saved to C:\Users\Wali\Documents\ICAD_Scraped.
+- Restructured and cleaned up the site:
+  - Copied the main landing page `home/index.html` to root `index.html` and deleted the redundant `home` folder.
+  - Rewrote asset and navigation paths (supporting both single and double quotes) relative to the root level.
+  - Recursively cleaned up empty/invalid subdirectories and administrative folders (e.g. `wp-admin`, `category`, `author`, `london-2023`).
+  - Validated that the whole website is perfectly navigable offline via the root `index.html` landing page.
+
+Git Diffs:
+```diff
+diff --git a/pubspec.yaml b/pubspec.yaml
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -51,3 +51,5 @@
+-  image_path: "assets/logo.jpg"
++  image_path: "assets/logo.png"
++  adaptive_icon_background: "#FAF6F0"
++  adaptive_icon_foreground: "assets/logo_foreground.png"
+@@ -64,3 +64,3 @@
+-    - assets/logo.jpg
++    - assets/logo.png
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -191,3 +191,3 @@
+-                                image: AssetImage('assets/logo.jpg'),
++                                image: AssetImage('assets/logo.png'),
+@@ -633,3 +633,3 @@
+-                            image: AssetImage('assets/logo.jpg'),
++                            image: AssetImage('assets/logo.png'),
+```
+
+Dynamic Chess Coach Commentary Engine Overhaul:
+- Replaced the repetitive, random dialogue selection decks with a rich, contextual, and emotionally responsive commentary engine for Prof. Solomon.
+- Implemented real-time board analysis including:
+  - **Material Balance Tracking**: Compares player and AI material score (P=1, N/B=3, R=5, Q=9) dynamically. If user is up (+3), Solomon reacts as "scared/nervous"; if AI is up (+3), Solomon acts as a "gentle teacher" offering encouraging positional suggestions.
+  - **Opening Book Detection**: Reconstructs move sequence in UCI format to identify 8 classic openings (Sicilian, French, Caro-Kann, Scandinavian, Queen's Gambit, Ruy Lopez, Italian Game, King's Indian) exactly on the turn they are established.
+  - **Attack/Defense Scanning & Hanging Pieces**: Detects if the user moves a piece to an undefended square under opponent attack and offers friendly tutorial prompts with undo suggestions.
+  - **Check/Checkmate Shock**: Captures checkmate and check moves on both sides to prompt highly specific and emotional reactions (e.g. shock when Solomon's queen is captured or he gets checked/mated).
+- Fixed a bug where capture and castling flags were crossed-wired, resulting in incorrect general replies.
+
+Git Diffs:
+```diff
+diff --git a/lib/chess_game_state.dart b/lib/chess_game_state.dart
+--- a/lib/chess_game_state.dart
++++ b/lib/chess_game_state.dart
+@@ -898,179 +898,224 @@
+-  String analyzeMoveAndComment({
+-    required chess_pkg.Chess game,
+-    required Map<String, dynamic> move,
+-    required String playerName,
+-    required bool isUserMove,
+-  }) {
+-    ... (old random dialogue list selectors)
++  String analyzeMoveAndComment({
++    required chess_pkg.Chess game,
++    required Map<String, dynamic> move,
++    required String playerName,
++    required bool isUserMove,
++  }) {
++    ... (new contextual chess coach commentary engine featuring openings, material scoring, shock/scared emotions, and gentle teacher dialogs)
+```
+
+Coach Character Picture Update:
+- Replaced the profile picture of the coach character (Solomon) in the app with the new green-themed textured portrait ("C:\Users\Wali\Downloads\Green Modern Fitness App Logo (1).png").
+- Copied the new image to `assets/coach.png` and updated references in `pubspec.yaml` and `lib/main.dart` from `assets/coach.jpg` to `assets/coach.png`.
+- Deleted the obsolete `assets/coach.jpg` file.
+
+Git Diffs:
+```diff
+diff --git a/pubspec.yaml b/pubspec.yaml
+--- a/pubspec.yaml
++++ b/pubspec.yaml
+@@ -63,3 +63,3 @@
+-    - assets/coach.jpg
++    - assets/coach.png
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -510,3 +510,3 @@
+-                              image: AssetImage('assets/coach.jpg'),
++                              image: AssetImage('assets/coach.png'),
+```
+
+Coach Frame Fade Modification:
+- Overhauled the coach profile picture border frame. Replaced the static, box-wide border with a custom painted border that omits the top border and fades the side borders towards the top.
+- Created `GradientBorderPainter` CustomPainter using a `LinearGradient` (solid `AppColors.copper` at the bottom 30%, fading to transparent at the top).
+- Wrapped the coach profile container in [main.dart](file:///c:/Code/Personal%20Projects/LearnChessWithWali/lib/main.dart) inside a `CustomPaint` with this new painter, while removing the `border` field from the inner container's `BoxDecoration` to keep the image itself unframed at the top.
+
+Git Diffs:
+```diff
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -503,12 +503,17 @@
+-                        Container(
+-                          width: 140,
+-                          height: 180,
+-                          decoration: BoxDecoration(
+-                            borderRadius: BorderRadius.circular(4),
+-                            border: Border.all(color: AppColors.copper, width: 1.5),
+-                            image: const DecorationImage(
+-                              image: AssetImage('assets/coach.png'),
+-                              fit: BoxFit.cover,
+-                            ),
+-                          ),
+-                        ),
++                        CustomPaint(
++                          painter: GradientBorderPainter(
++                            color: AppColors.copper,
++                            strokeWidth: 1.5,
++                          ),
++                          child: Container(
++                            width: 140,
++                            height: 180,
++                            decoration: BoxDecoration(
++                              borderRadius: BorderRadius.circular(4),
++                              image: const DecorationImage(
++                                image: AssetImage('assets/coach.png'),
++                                fit: BoxFit.cover,
++                              ),
++                            ),
++                          ),
++                        ),
+```
+
+Coach Speech Space Expansion:
+- Expanded the vertical space allocated to the coach's speech bubbles by increasing the chat container height to 230 to align its bottom limit perfectly with the bottom of the profile buttons row.
+- Updated the chat container SizedBox height in [main.dart](file:///c:/Code/Personal%20Projects/LearnChessWithWali/lib/main.dart) from 180 to 230.
+
+Git Diffs:
+```diff
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -585,3 +585,3 @@
+-                          height: 180, // Matches height of Solomon's photo block
++                          height: 230, // Matches height of Solomon's photo block + spacing + buttons
+```
+
+Interactive Training Academy & Graphical Dashboard:
+- Overhauled the stats engine to dynamically compute gamesPlayed, gamesWon, gamesDrawn, and gamesLost directly from the persistent `gameHistory` list, resolving incorrect calculations.
+- Fixed the `gameHistory` deserializer in `loadState` to be fully exception-safe, preventing history corruption or single-item truncation.
+- Added a "Performance Insights" card to the Home Screen displaying two beautifully animated widgets using CustomPainters:
+  - An animated Win Rate circular ring chart.
+  - An animated ELO progression sparkline line chart with gradient area fills.
+- Built a deeply interactive chess training system under the Train tab featuring a 4-phase learning flow:
+  1. **Watch & Learn**: Demo moves are animated and explained step-by-step by Solomon.
+  2. **Assisted Practice**: The user must play the training moves on the board; Solomon provides inline correction.
+  3. **Real Challenges**: 4 chess puzzles (openings, middlegame outposts, king pawn endgames, back-rank checkmates, and defense) where Solomon actively counters the user.
+  4. **Success**: Solomon awards passing certificate.
+- Overhauled the Train screen to render categorized list cards and a specialized training interface integrating `ChessBoardWidget` directly.
+
+Git Diffs:
+```diff
+diff --git a/lib/chess_game_state.dart b/lib/chess_game_state.dart
+--- a/lib/chess_game_state.dart
++++ b/lib/chess_game_state.dart
+@@ -285,6 +285,15 @@
+   List<Map<String, dynamic>> gameHistory = [];
++  bool isTrainingMode = false;
++  int trainingLessonIndex = 0;
++  String trainingPhase = 'watch';
++  int trainingWatchStep = 0;
++  int trainingAssistStep = 0;
++  int trainingChallengeIndex = 0;
++  int trainingChallengeStep = 0;
+@@ -409,6 +418,12 @@
+-        final decoded = jsonDecode(historyJson) as List<dynamic>;
+-        gameHistory = decoded.map((item) => Map<String, dynamic>.from(item as Map)).toList();
++        try {
++          final decoded = jsonDecode(historyJson);
++          if (decoded is List) {
++            gameHistory = decoded.map((item) => Map<String, dynamic>.from(item as Map)).toList();
++          }
++        } catch (_) {}
++        _recalculateStats();
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -691,3 +691,6 @@
++                  Text("Performance Insights"),
++                  CustomPaint(painter: WinRateRingPainter(...)),
++                  CustomPaint(painter: EloLineChartPainter(...)),
+@@ -772,18 +772,83 @@
+-      case AppScreen.train:
+-        return ListView(...);
++      case AppScreen.train:
++        if (state.isTrainingMode) {
++          return SingleChildScrollView(child: Column(children: [ChessBoardWidget(...)]));
++        }
++        return ListView(children: [...]);
+```
+
+Marketing and Social Media Assets:
+- Created the [marketting](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting) folder in the root of the workspace.
+- Generated and moved the build-in-public Day 1 LinkedIn carousel HTML slide deck [121-learn-chess-with-sol.html](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.html) and matching caption/copy files [121-learn-chess-with-sol](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol) here. All copy is written in the user's specific sanitized tone (no commas, quotes, parentheses, ampersands, or non-ASCII characters).
+- Updated [121-learn-chess-with-sol.html](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.html) to use background images from the local [pins](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/pins) folder and absolute paths to the C:\social media folder assets.
+- Reduced [121-learn-chess-with-sol.html](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.html) to a single high-impact poster screen combining all key features and assets.
+- Replaced all "@notevenwali" and "#notevenwali" references with "Wali Medugu" and "#WaliMedugu" across the HTML and caption files.
+- Set the visual cutout image in the poster to use the image [6cbe95f4bcc5636c3a2bdeecf1ff6fe8.jpg](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/pins/6cbe95f4bcc5636c3a2bdeecf1ff6fe8.jpg) copied to the local [pins](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/pins) folder, resolving browser security path access errors.
+- Increased list item font size to 30px in [121-learn-chess-with-sol.html](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.html) and rewrote descriptions to highlight advanced technical skills (context-aware AI, CustomPainter canvas graphs, state-driven rules validation engine, vector shaders) to impress potential employers. Updated the caption files to match.
+- Simplified bullet points in [121-learn-chess-with-sol.html](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.html) and the caption files to display direct concepts without the "item title: item description" format, optimizing layout balance and screen density.
+- Replaced the UI-focused board shader description with the feature-focused "Custom ELO rating engine with persistent match logging" to emphasize backend/algorithmic skills to employers.
+- Created [render.js](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/render.js) and compiled the HTML single-screen poster into a high-DPI static image [121-learn-chess-with-sol.png](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.png), a 25fps animated GIF [121-learn-chess-with-sol.gif](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.gif), and a smooth H.264 video [121-learn-chess-with-sol.mp4](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.mp4) using Puppeteer and FFmpeg.
+- Rolled back the caption files to the original, highly storytelling-oriented tone, while strictly filtering all characters to only allow emojis (😭, 🙈, 😋, 🙂, ↕️, ✨) and punctuation (. ... : , ? !!!!).
+- Created [create_motion_photo.py](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/create_motion_photo.py) and successfully generated a Google-compliant Motion Photo [121-learn-chess-with-sol.motion.jpg](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/121-learn-chess-with-sol.motion.jpg) by embedding XMP MicroVideo offset metadata and appending the high-res MP4 video to the JPEG image data.
+- Upgraded [create_motion_photo.py](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/create_motion_photo.py) to serialise XMP tags as standard child elements (which mobile gallery apps prefer over attributes) and added the modern `Container:Directory` specifications. Generated [MVIMG_20260810_195826.jpg](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/MVIMG_20260810_195826.jpg) using Samsung's camera naming convention to ensure standard playback recognition.
+- Created the dedicated subfolder [motionphoto](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/motionphoto) and placed all generated Samsung Motion Photo files ([20260810_195826.jpg](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/motionphoto/20260810_195826.jpg), [MVIMG_20260810_195826.jpg](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/motionphoto/MVIMG_20260810_195826.jpg), and [121-learn-chess-with-sol.motion.jpg](file:///c:/Code/Personal%20Projects/LearnChessWithWali/marketting/motionphoto/121-learn-chess-with-sol.motion.jpg)) inside.
+
+Pre-Game Side Selection & Chat Layout Optimization:
+- Added interactive pre-game side selection popup in the coach chat area before every game. Solomon prompts the user to select their side (White, Black, or Random).
+- Created `_buildChatOptionBubble` widget styled identically to Solomon's chat bubbles (`bgColor: white`, `borderColor: AppColors.sand`, serif typography `fontSize: 13`, `color: AppColors.textMain`, `height: 1.3`, no icons or emojis).
+- Reduced chat typography font size from 15 to 13 across Solomon's chat bubbles and interactive option bubbles for cleaner compact readability.
+- Removed all emojis and extra text from the options:
+  - "Play as White"
+  - "Play as Black"
+  - "Or let me choose"
+- Integrated `isPendingSideSelection` state flow in `ChessGameState`:
+  - When starting or restarting a game, board taps are held until a side choice is selected.
+  - Selecting White sets board orientation normal and prompts user for their opening move.
+  - Selecting Black automatically flips the board and triggers Solomon's initial opening move as White.
+  - Selecting Random randomly assigns White or Black and initializes accordingly.
+- Lowered board position and expanded chat area:
+  - Increased chat column height from 230 to 290.
+  - Increased gap spacing above `ChessBoardWidget` from 24 to 36 to position the chess board lower on the screen and give Solomon's speech bubble and option popups ample space.
+
+Git Diffs:
+```diff
+diff --git a/lib/chess_game_state.dart b/lib/chess_game_state.dart
+--- a/lib/chess_game_state.dart
++++ b/lib/chess_game_state.dart
+@@ -309,2 +309,4 @@
++  // Side selection popup state before every game start
++  bool isPendingSideSelection = true;
+@@ -499,5 +534,40 @@
+   void resetGame() {
+     _initGame();
+     previousCommentary = null;
+-    final random = math.Random();
+-    lastCommentary = welcomes[random.nextInt(welcomes.length)];
++    isPendingSideSelection = true;
++    lastCommentary = "Before we begin our game, which side would you prefer to play on?";
+     saveState();
+     notifyListeners();
+   }
++
++  Future<void> chooseSide(String choice) async {
++    PlayerColor selectedColor;
++    if (choice == 'random') {
++      final random = math.Random();
++      selectedColor = random.nextBool() ? PlayerColor.white : PlayerColor.black;
++    } else if (choice == 'black') {
++      selectedColor = PlayerColor.black;
++    } else {
++      selectedColor = PlayerColor.white;
++    }
++    ...
++  }
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -448,27 +448,21 @@
+   Widget _buildChatBubble(String text) {
+     return CustomPaint(
+       painter: ChatBubblePainter(bgColor: Colors.white, borderColor: AppColors.sand),
+       child: Container(
+-        constraints: const BoxConstraints(minHeight: 64),
+-        padding: const EdgeInsets.only(left: 20.0, right: 12.0, top: 12.0, bottom: 12.0),
++        constraints: const BoxConstraints(minHeight: 48),
++        padding: const EdgeInsets.only(left: 20.0, right: 12.0, top: 10.0, bottom: 10.0),
+         child: Text(
+           text,
+-          style: AppFonts.serif(fontSize: 15, color: AppColors.textMain, height: 1.3),
++          style: AppFonts.serif(fontSize: 13, color: AppColors.textMain, height: 1.3),
+         ),
+       ),
+     );
+   }
+@@ -623,28 +622,48 @@
+                           height: 290, // Expanded height to give chat more room & show side options
+                           child: SingleChildScrollView(
+                             physics: const BouncingScrollPhysics(),
+-                            child: Column(
+-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+-                              children: [
+-                                _buildChatBubble(speechText),
+-                                if (state.isPendingSideSelection && !isReview) ...[
+-                                  const SizedBox(height: 10),
+-                                  _buildChatOptionBubble("Play as White", () {
+-                                    state.chooseSide('white');
+-                                  }),
+-                                  const SizedBox(height: 8),
+-                                  _buildChatOptionBubble("Play as Black", () {
+-                                    state.chooseSide('black');
+-                                  }),
+-                                  const SizedBox(height: 8),
+-                                  _buildChatOptionBubble("Or let me choose", () {
+-                                    state.chooseSide('random');
+-                                  }),
+-                                ] else if (state.previousCommentary != null && !isReview) ...[
+-                                  const SizedBox(height: 8),
+-                                  _buildChatBubble(state.previousCommentary!),
+-                                ],
+-                              ],
++                            child: AnimatedSwitcher(
++                              duration: const Duration(milliseconds: 400),
++                              switchInCurve: Curves.easeOutQuart,
++                              switchOutCurve: Curves.easeInQuart,
++                              transitionBuilder: (Widget child, Animation<double> animation) {
++                                return FadeTransition(
++                                  opacity: animation,
++                                  child: SlideTransition(
++                                    position: Tween<Offset>(
++                                      begin: const Offset(0.0, 0.08),
++                                      end: Offset.zero,
++                                    ).animate(animation),
++                                    child: child,
++                                  ),
++                                );
++                              },
++                              child: Column(
++                                key: ValueKey<String>(
++                                  "${speechText}_${state.previousCommentary ?? ''}_${state.isPendingSideSelection}"
++                                ),
++                                crossAxisAlignment: CrossAxisAlignment.stretch,
++                                children: [
++                                  _buildChatBubble(speechText),
++                                  if (state.isPendingSideSelection && !isReview) ...[
++                                    const SizedBox(height: 10),
++                                    _buildChatOptionBubble("Play as White", () => state.chooseSide('white')),
++                                    const SizedBox(height: 8),
++                                    _buildChatOptionBubble("Play as Black", () => state.chooseSide('black')),
++                                    const SizedBox(height: 8),
++                                    _buildChatOptionBubble("Or let me choose", () => state.chooseSide('random')),
++                                  ] else if (state.previousCommentary != null && !isReview) ...[
++                                    const SizedBox(height: 8),
++                                    _buildChatBubble(state.previousCommentary!),
++                                  ],
++                                ],
++                              ),
+                             ),
+                           ),
+```
+
+Home Screen Layout Clean-up & Game History Navigation:
+- Removed the header Row (profile picture, title, "Welcome back" subtitle) and the static coach description paragraph from the top card of the Home screen, starting the dashboard directly with the clean ELO/stats scorecard.
+- Fixed empty ELO Progress chart: passed `currentElo` to `EloLineChartPainter` and parsed ELO history points with num-safe exception-free conversions. Added fallback ELO line plotting `[800, currentElo]` for new players with empty history records.
+- Modified Game History list to display only the most recent 5 matches.
+- Added a "Show More" option button at the bottom of the history card when history contains more than 5 games.
+- Created `GameHistoryScreen` (a new full-screen scaffold styled with Arguuu theme aesthetics) displaying a scrollable list of all match records and offering review mode launcher actions.
+
+Git Diffs:
+```diff
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -691,11 +691,10 @@
+-        return ListView(
+-          padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
+-          children: [
+-            ArguuuCard(
+-              padding: const EdgeInsets.all(24),
+-              child: Column(
+-                children: [
+-                  Row(children: [Container(...), Column(children: [Text("Learn Chess..."), Text("Welcome back...")])]),
+-                  Text("Your chess coach..."),
+-                  Row(children: [_buildProfileStat(...)])
+-                ]
+-              )
+-            )
++        final displayedGames = state.gameHistory.take(5).toList();
++        return ListView(
++          padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
++          children: [
++            ArguuuCard(
++              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
++              child: Row(
++                mainAxisAlignment: MainAxisAlignment.spaceAround,
++                children: [
++                  _buildProfileStat("Rating", "${state.userElo} ELO"),
++                  _buildProfileStat("Games", "${state.gamesPlayed}"),
++                  _buildProfileStat("Win Rate", "${winRate.toStringAsFixed(0)}%"),
++                ],
++              ),
++            ),
+@@ -834,1 +834,2 @@
+-                                      painter: EloLineChartPainter(history: state.gameHistory, ...),
++                                      painter: EloLineChartPainter(history: state.gameHistory, currentElo: state.userElo, ...),
+@@ -880,2 +940,36 @@
+-                    ListView.builder(itemCount: state.gameHistory.length, ...)
++                    ListView.builder(itemCount: displayedGames.length, ...)
++                    if (state.gameHistory.length > 5) ...[
++                      GestureDetector(
++                        onTap: () {
++                          Navigator.push(context, MaterialPageRoute(builder: (context) => GameHistoryScreen(...)));
++                        },
++                        child: Center(child: Text("Show More")),
++                      )
++                    ]
++                  ]
+@@ -1763,6 +1873,114 @@
++class GameHistoryScreen extends StatelessWidget {
++  ...
++}
+```
+
+Windows and Web/Chrome Platform Support:
+- Created and configured the `windows` and `web` directories/files in the project using `flutter create --platforms=windows,web .`.
+- Successfully validated static analysis, release build compilation, and execution for both targets:
+  - Windows release executable successfully compiled: `build/windows/x64/runner/Release/learn_chess_with_wali.exe`.
+  - Web/Chrome production build successfully compiled: `build/web`.
+
+Responsive Board Layout for Landscape/Horizontal Devices:
+- Implemented media-query-based layout switches (`MediaQuery.of(context).orientation == Orientation.landscape`) for both the live play screen (`AppScreen.play`) and training screen (`AppScreen.train` in training mode).
+- Configured a side-by-side layout in landscape mode:
+  - Left Column: Chess Board is centered and constrained to a 1.0 aspect ratio fitting within the vertical viewport height, preventing stretching and eliminating scrolling.
+  - Right Column: Coach Solomon's picture, action controls (hints, undo, options), and commentary/speech bubble logs are rendered in a scrollable panel next to the board.
+- Adjusted bottom padding dynamically when the navigation bar is present (`state.hasSelectedLevel`) to ensure the board is never obscured.
+- Fixed horizontal buttons row layout overflow by expanding the Coach profile width constraints and buttons row width to 130 (and height to 160) to fit all three action buttons side-by-side in landscape.
+
+Chess Sound Effects and Smooth Piece Animations:
+- Added `audioplayers` package dependency and instantiated a central `AudioPlayer` in `ChessGameState`.
+- Created custom Python wave synthesis scripts generating high-fidelity wooden `move.wav` and sharp contact `capture.wav` sound effects offline in `assets/sounds/`, registered inside `pubspec.yaml`.
+- Integrated central move interceptor `makeMoveWithSound` playing click sound on every normal move and capture sound on every piece capture (handling en passant and castling).
+- Refactored `ChessBoardWidget` into a `StatefulWidget` overlaying animated pieces inside a `Stack` via `AnimatedPositioned` using a smooth cubic easing transition (`Curves.easeInOutCubic` over 280ms).
+- Built custom transition resolution logic tracking piece identities (fen-safe handles) across normal moves, captures, en passants, promotions, and castling to ensure stable key indexes for clean transitions.
+- Wrapped overlayed pieces in `IgnorePointer` to ensure tap interactions fall straight through to background board square hitboxes.
+
+Windows and Chrome Icon Synchronization:
+- Synchronized Windows and Chrome icons to use the exact same logo as mobile (`assets/logo.png`).
+- Replaced Web favicon and multiple app icons (`web/favicon.png`, `web/icons/Icon-192.png`, `web/icons/Icon-512.png`, `web/icons/Icon-maskable-192.png`, `web/icons/Icon-maskable-512.png`).
+- Converted `assets/logo.png` into a native `.ico` file using binary packing for `windows/runner/resources/app_icon.ico`.
+- Successfully compiled both Web release (`build/web`) and Windows desktop executable (`build/windows/x64/runner/Release/learn_chess_with_wali.exe`).
+
+Imported Design Assets:
+- Copied the downloaded folder `Untitled design (1)` containing 7 design files (`1.png` to `7.png`) from the Downloads folder into the project's `assets/` directory.
+- Registered the new directory (`- assets/Untitled design (1)/`) under the `assets` list in `pubspec.yaml` and loaded the assets successfully.
+
+MBTI Coach Personalities Selection:
+- Renamed the design assets folder to `assets/mbti_coaches/` containing files for 7 personality types: `INTP.png`, `ENTP.png`, `ENTJ.png`, `ENFJ.png`, `ISTJ.png`, `ISFP.png`, `ESFP.png`. Registered it in `pubspec.yaml`.
+- Made `INTP` the default active coach in `ChessGameState` and implemented state persistence to keep the selected coach saved between sessions via `SharedPreferences`.
+- Replaced all static coach picture widgets in `lib/main.dart` (landscape, portrait, dialog bubbles, and training indicators) to load dynamically from `'assets/mbti_coaches/${state.currentCoach}.png'`.
+- Wrapped the coach profile image container in a `GestureDetector` that opens a custom 2-column GridView selection popup when tapped, letting the user choose their personality coach on-the-fly.
+- Verified build and compilation on both Web/Chrome and Windows desktop targets.
+
+MBTI Coach Personality Customization:
+- Implemented distinct MBTI coach personalities by formatting the generated commentary dynamically according to the selected coach's personality type (INTP, ENTP, ENTJ, ENFJ, ISTJ, ISFP, ESFP).
+- Added formatted getters `formattedLastCommentary` and `formattedPreviousCommentary` in ChessGameState, which strip the legacy "Solomon: " prefix, run the raw comments through the coach's personality filter, and prepend the selected coach's name (e.g. "INTP: ...").
+- Integrated unique prefix/suffix injections and word replacements tailored to each personality (e.g., ENTJ uses strategic/command directives, ENFJ uses encouraging growth language, ESFP uses energetic/dramatic exclamations, ISFP uses aesthetic flow harmony, etc.).
+- Updated the opponent names and dialog descriptions in `lib/main.dart` to display the active coach's name (e.g., "INTP" or "ENTJ") instead of the hardcoded "Solomon" in all game views, reviews, draw proposals, and adjust difficulty modals.
+
+Git Diffs:
+```diff
+diff --git a/lib/chess_game_state.dart b/lib/chess_game_state.dart
+--- a/lib/chess_game_state.dart
++++ b/lib/chess_game_state.dart
+@@ -27,6 +27,208 @@
+     }
+   }
+ 
++  String get formattedLastCommentary => formatCoachComment(lastCommentary);
++  String? get formattedPreviousCommentary => previousCommentary != null ? formatCoachComment(previousCommentary!) : null;
++
++  String formatCoachComment(String comment) {
++    // Strip optional name prefixes
++    String cleanComment = comment;
++    if (cleanComment.startsWith("Solomon: ")) {
++      cleanComment = cleanComment.substring("Solomon: ".length);
++    } else if (cleanComment.startsWith("Prof. Solomon: ")) {
++      cleanComment = cleanComment.substring("Prof. Solomon: ".length);
++    }
++    
++    // Apply personality transformations
++    String styled = _applyPersonality(cleanComment, currentCoach);
++    
++    // Return with coach's prefix
++    return "$currentCoach: $styled";
++  }
++
++  String _applyPersonality(String baseComment, String coach) {
++    final random = math.Random(baseComment.hashCode);
++    switch (coach) {
++      case 'INTP':
++        ...
++      case 'ENTP':
++        ...
++      case 'ENTJ':
++        ...
++      case 'ENFJ':
++        ...
++      case 'ISTJ':
++        ...
++      case 'ISFP':
++        ...
++      case 'ESFP':
++        ...
++      default:
++        return baseComment;
++    }
++  }
++
+   void _triggerSound(bool isCapture) {
+     try {
+       final String path = isCapture ? 'sounds/capture.wav' : 'sounds/move.wav';
+@@ -954,7 +954,7 @@
+ 
+     // Save game record to history list
+     final opponentName = gameMode == GameMode.vsComputer 
+-        ? "Prof. Solomon (${difficultyLabels[aiDifficulty]})" 
++        ? "$currentCoach (${difficultyLabels[aiDifficulty]})" 
+         : "Pass & Play";
+ 
+     final gameRecord = {
+@@ -1343,7 +1343,7 @@
+       int change = eloRes['change']!;
+       String changeSign = change >= 0 ? '+' : '';
+       
+-      msg += "\n\nSolomon's Rating: ${opponentElos[aiDifficulty]} ELO"
++      msg += "\n\n$currentCoach's Rating: ${opponentElos[aiDifficulty]} ELO"
+              "\nYour Rating: $oldElo → $newElo ($changeSign$change ELO)";
+     }
+ 
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -512,14 +512,14 @@
+         final bool isReview = state.isReviewMode;
+         
+         // Define speech bubble text dynamically in review mode vs live mode
+-        String speechText = state.lastCommentary;
++        String speechText = state.formattedLastCommentary;
+         if (isReview) {
+           if (state.reviewIndex == 0) {
+-            speechText = "Solomon: This is the starting position of our match.";
++            speechText = state.formatCoachComment("This is the starting position of our match.");
+           } else if (state.reviewIndex == state.reviewFens.length - 1) {
+-            speechText = "Solomon: The game ended here. Result: ${state.reviewResult}.";
++            speechText = state.formatCoachComment("The game ended here. Result: ${state.reviewResult}.");
+           } else {
+-            speechText = "Solomon: Move ${state.reviewIndex} of ${state.reviewFens.length - 1}. Reviewing game against ${state.reviewOpponentName}.";
++            speechText = state.formatCoachComment("Move ${state.reviewIndex} of ${state.reviewFens.length - 1}. Reviewing game against ${state.reviewOpponentName}.");
+           }
+         }
+```
+- Safeguarded string operations by adding a safe `lowercaseFirst` local helper function in ChessGameState._applyPersonality to prevent RangeError crashes if an empty or single-character comment is formatted.
+- Removed MBTI coach name tags in chat bubbles by returning only the styled commentary in ChessGameState.formatCoachComment.
+- Removed MBTI text label titles from under the coach grid item portraits and simplified the layout in lib/main.dart.
+
+Coach Personality Engine Architecture Overhaul:
+- Created `lib/coach_personality.dart` implementing MBTI-specific content banks across 17 move categories (checkmate, openings, checks, queen captures, blunder streaks, repeated squares, comebacks, material swings, castling, etc.).
+- Integrated `CoachMemory` session & relationship state into `ChessGameState`:
+  - Tracks user hanging pieces, blunder streaks, visited squares, material deficit comebacks per-game.
+  - Tracks lifetime game count vs coach (`gamesPlayedVsThisCoach`) and relationship awareness (`hasMetBefore`).
+  - Persists relationship memory across restarts via SharedPreferences (`coachMemory`).
+- Implemented `_AntiRepeat` pool filtering to guarantee lines are not repeated within a session per category.
+- Updated `ChessGameState` to call `generateCoachCommentary` directly via `_updateCommentary(move, isUserMove)`.
+- Updated `lib/main.dart` to read `lastCommentary` and `previousCommentary` directly without post-hoc styling wrappers.
+
+Full 16 MBTI Coach Expansion & Profile Pictures Update:
+- Copied all 16 custom MBTI coach profile pictures from `C:\Users\Wali\Downloads\mbticustoms` to `assets/mbti_coaches/` (`ENFJ.png`, `ENFP.png`, `ENTJ.png`, `ENTP.png`, `ESFJ.png`, `ESFP.png`, `ESTJ.png`, `ESTP.png`, `INFJ.png`, `INFP.png`, `INTJ.png`, `INTP.png`, `ISFJ.png`, `ISFP.png`, `ISTJ.png`, `ISTP.png`).
+- Expanded the `mbtiCoaches` array in `ChessGameState` to list all 16 MBTI types in the selection sheet grid.
+- Expanded `lib/coach_personality.dart` with dedicated personality content banks for all 9 remaining MBTI types (`INTJ`, `INFJ`, `INFP`, `ENFP`, `ISFJ`, `ESTJ`, `ESFJ`, `ISTP`, `ESTP`), completing custom commentary coverage across all 16 MBTI profiles.
+
+Windows Build Fix:
+- Wrap native assets installation in `windows/CMakeLists.txt` in an `EXISTS` check to avoid install step failures when native assets are not generated.
+
+Git Diffs:
+```diff
+diff --git a/windows/CMakeLists.txt b/windows/CMakeLists.txt
+--- a/windows/CMakeLists.txt
++++ b/windows/CMakeLists.txt
+@@ -91,3 +91,5 @@
+-install(DIRECTORY "${NATIVE_ASSETS_DIR}"
+-   DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+-   COMPONENT Runtime)
++if(EXISTS "${NATIVE_ASSETS_DIR}")
++  install(DIRECTORY "${NATIVE_ASSETS_DIR}"
++     DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
++     COMPONENT Runtime)
++endif()
+```
+
+New Judge Selection, Lessons Scrapped, and Piece Render Overhaul:
+- Modified the game reset logic under `resetGame()` in `lib/chess_game_state.dart` to dynamically select a new random coach (judge) from the pool of 16 MBTI personalities, ensuring the new judge is different from the currently active coach.
+- Scrapped the static lessons section by removing the "Lessons" tab from bottom navigation, deleting the `AppScreen.lessons` enum value, and removing its switch case view and helper widgets in `lib/main.dart`.
+- Fixed the piece rendering bugs (scrambled board / invisible pieces) by replacing the incremental state matching in `lib/chess_board.dart`'s `_updatePieces()` with a robust, multi-pass matching algorithm that maps the current chess engine FEN board state to old pieces (matching static pieces first, then the moving piece and the castling rook), falling back to unique timestamped IDs for new pieces.
+
+Git Diffs:
+```diff
+diff --git a/lib/chess_board.dart b/lib/chess_board.dart
+--- a/lib/chess_board.dart
++++ b/lib/chess_board.dart
+@@ -133,58 +133,181 @@
+     final from = widget.state.lastMoveFrom;
+     final to = widget.state.lastMoveTo;
+     
+-    if (from != null && to != null && _lastFen != null) {
+-      final movingPieceIndex = _pieces.indexWhere((p) => p.square == from);
+-      
+-      if (movingPieceIndex != -1) {
+-        final movingPiece = _pieces[movingPieceIndex];
+-        
+-        // Remove captured piece at the destination square
+-        _pieces.removeWhere((p) => p.square == to && p.id != movingPiece.id);
+-        
+-        // Move the piece
+-        movingPiece.square = to;
+-        
+-        // En passant capture detection
+-        if (movingPiece.type == chess_pkg.PieceType.PAWN && from[0] != to[0]) {
+-          final String capturedPawnSquare = '${to[0]}${from[1]}';
+-          _pieces.removeWhere((p) => p.square == capturedPawnSquare);
+-        }
+-        
+-        // Castling rook move update
+-        if (movingPiece.type == chess_pkg.PieceType.KING) {
+-          final fromCol = from[0];
+-          final toCol = to[0];
+-          final rowChar = from[1];
+-          
+-          if ((fromCol == 'e' && toCol == 'g') || (fromCol == 'e' && toCol == 'c')) {
+-            if (toCol == 'g') {
+-              final rookIndex = _pieces.indexWhere((p) => p.square == 'h$rowChar');
+-              if (rookIndex != -1) _pieces[rookIndex].square = 'f$rowChar';
+-            } else {
+-              final rookIndex = _pieces.indexWhere((p) => p.square == 'a$rowChar');
+-              if (rookIndex != -1) _pieces[rookIndex].square = 'd$rowChar';
+-            }
+-          }
+-        }
+-        
+-        // Promotion update
+-        final boardPiece = game.get(to);
+-        if (boardPiece != null && boardPiece.type != movingPiece.type) {
+-          _pieces[movingPieceIndex] = AnimatedPiece(
+-            id: movingPiece.id,
+-            type: boardPiece.type,
+-            color: boardPiece.color,
+-            square: to,
+-          );
+-        }
+-        
+-        _lastFen = currentFen;
+-        return;
+-      }
+-    }
+-    
+-    _initializePieces();
++    // 1. Get all pieces currently on the board from the chess engine
++    final List<Map<String, dynamic>> newBoardPieces = [];
++    for (int r = 0; r < 8; r++) {
++      for (int c = 0; c < 8; c++) {
++        final squareName = '${"abcdefgh"[c]}${8 - r}';
++        final piece = game.get(squareName);
++        if (piece != null) {
++          newBoardPieces.add({
++            'square': squareName,
++            'type': piece.type,
++            'color': piece.color,
++          });
++        }
++      }
++    }
++    
++    // 2. We will build a new list of AnimatedPiece objects
++    final List<AnimatedPiece> nextPieces = [];
++    
++    // Track which old pieces from _pieces have been matched/consumed
++    final Set<String> matchedOldPieceIds = {};
++    
++    // Track special castling rook movements
++    String? castlingRookFrom;
++    String? castlingRookTo;
++    if (from != null && to != null) {
++      AnimatedPiece? oldKing;
++      for (final p in _pieces) {
++        if (p.square == from && p.type == chess_pkg.PieceType.KING) {
++          oldKing = p;
++          break;
++        }
++      }
++      if (oldKing != null) {
++        final fromCol = from[0];
++        final toCol = to[0];
++        final rowChar = from[1];
++        if (fromCol == 'e') {
++          if (toCol == 'g') {
++            castlingRookFrom = 'h$rowChar';
++            castlingRookTo = 'f$rowChar';
++          } else if (toCol == 'c') {
++            castlingRookFrom = 'a$rowChar';
++            castlingRookTo = 'd$rowChar';
+           }
+         }
+       }
+     }
++
++    // First pass: Match pieces that didn't move at all (same square, type, and color)
++    for (final newPiece in newBoardPieces) {
++      final sq = newPiece['square'] as String;
++      final type = newPiece['type'] as chess_pkg.PieceType;
++      final color = newPiece['color'] as chess_pkg.Color;
++      
++      // Don't match the destination square of the move or the castling rook destination in the first pass
++      if (sq == to || sq == castlingRookTo) {
++        continue;
++      }
++      
++      final oldMatchIndex = _pieces.indexWhere((p) => 
++        p.square == sq && 
++        p.type == type && 
++        p.color == color && 
++        !matchedOldPieceIds.contains(p.id)
++      );
++      
++      if (oldMatchIndex != -1) {
++        final oldPiece = _pieces[oldMatchIndex];
++        matchedOldPieceIds.add(oldPiece.id);
++        nextPieces.add(AnimatedPiece(
++          id: oldPiece.id,
++          type: type,
++          color: color,
++          square: sq,
++        ));
++      }
++    }
++    
++    // Second pass: Match the moving piece(s)
++    for (final newPiece in newBoardPieces) {
++      final sq = newPiece['square'] as String;
++      final type = newPiece['type'] as chess_pkg.PieceType;
++      final color = newPiece['color'] as chess_pkg.Color;
++      
++      // Skip if already added in the first pass
++      if (nextPieces.any((p) => p.square == sq)) {
++        continue;
++      }
++      
++      if (sq == to && from != null) {
++        // This is the primary moving piece!
++        // Find the old piece that was at 'from'
++        final oldMatchIndex = _pieces.indexWhere((p) => 
++          p.square == from && 
++          p.color == color &&
++          !matchedOldPieceIds.contains(p.id)
++        );
++        
++        if (oldMatchIndex != -1) {
++          final oldPiece = _pieces[oldMatchIndex];
++          matchedOldPieceIds.add(oldPiece.id);
++          nextPieces.add(AnimatedPiece(
++            id: oldPiece.id,
++            type: type, // Use the new type in case of promotion!
++            color: color,
++            square: sq,
++          ));
++          continue;
++        }
++      }
++      
++      if (sq == castlingRookTo && castlingRookFrom != null) {
++        // This is the castling rook!
++        final oldMatchIndex = _pieces.indexWhere((p) => 
++          p.square == castlingRookFrom && 
++          p.color == color &&
++          !matchedOldPieceIds.contains(p.id)
++        );
++        
++        if (oldMatchIndex != -1) {
++          final oldPiece = _pieces[oldMatchIndex];
++          matchedOldPieceIds.add(oldPiece.id);
++          nextPieces.add(AnimatedPiece(
++            id: oldPiece.id,
++            type: type,
++            color: color,
++            square: sq,
++          ));
++          continue;
++        }
++      }
++    }
++    
++    // Third pass: Fallback for any unmatched pieces currently on the board
++    for (final newPiece in newBoardPieces) {
++      final sq = newPiece['square'] as String;
++      final type = newPiece['type'] as chess_pkg.PieceType;
++      final color = newPiece['color'] as chess_pkg.Color;
++      
++      if (nextPieces.any((p) => p.square == sq)) {
++        continue;
++      }
++      
++      // Try to find any remaining unmatched old piece of same color and type
++      final oldMatchIndex = _pieces.indexWhere((p) => 
++        p.type == type && 
++        p.color == color && 
++        !matchedOldPieceIds.contains(p.id)
++      );
++      
++      if (oldMatchIndex != -1) {
++        final oldPiece = _pieces[oldMatchIndex];
++        matchedOldPieceIds.add(oldPiece.id);
++        nextPieces.add(AnimatedPiece(
++          id: oldPiece.id,
++          type: type,
++          color: color,
++          square: sq,
++        ));
++      } else {
++        // Create a new unique ID
++        final id = '${color.name}_${type.name}_${sq}_${DateTime.now().microsecondsSinceEpoch}';
++        nextPieces.add(AnimatedPiece(
++          id: id,
++          type: type,
++          color: color,
++          square: sq,
++        ));
++      }
++    }
++    
++    _pieces.clear();
++    _pieces.addAll(nextPieces);
++    _lastFen = currentFen;
+   }
+diff --git a/lib/chess_game_state.dart b/lib/chess_game_state.dart
+--- a/lib/chess_game_state.dart
++++ b/lib/chess_game_state.dart
+@@ -565,6 +565,13 @@
+   }
+ 
+   void resetGame() {
++    if (mbtiCoaches.isNotEmpty) {
++      final availableCoaches = mbtiCoaches.where((c) => c != currentCoach).toList();
++      if (availableCoaches.isNotEmpty) {
++        final random = math.Random();
++        currentCoach = availableCoaches[random.nextInt(availableCoaches.length)];
++      }
++    }
+     _initGame();
+     previousCommentary = null;
+     isPendingSideSelection = true;
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -61,7 +61,7 @@
+   }
+ }
+ 
+-enum AppScreen { home, play, train, lessons }
++enum AppScreen { home, play, train }
+ 
+ class ChessGameScreen extends StatefulWidget {
+   const ChessGameScreen({super.key});
+@@ -117,7 +117,6 @@
+                     _buildNavItem(AppScreen.home, Icons.home_outlined, "Home", hasDot: true),
+                     _buildNavItem(AppScreen.play, null, "Play", useCustomPawn: true),
+                     _buildNavItem(AppScreen.train, Icons.sync_alt, "Train"),
+-                    _buildNavItem(AppScreen.lessons, Icons.book_outlined, "Lessons"),
+                   ],
+                 ),
+               ),
+@@ -1479,58 +1479,7 @@
+             ],
+           ],
+         );
+-      case AppScreen.lessons:
+-        return ListView(
+-          padding: const EdgeInsets.only(top: 24, left: 16, right: 16),
+-          children: [
+-            _buildLearnLessonCard(
+-              title: "1. The Power of Center Control",
+-              description: "Learn why controlling the four central squares d4, e4, d5, and e5 determines early game dominance.",
+-              onTap: () {
+-                setState(() {
+-                  state.lastCommentary = "Solomon: Dominating the center gives your pieces major mobility.";
+-                  _activeScreen = AppScreen.play;
+-                });
+-              },
+-            ),
+-            _buildLearnLessonCard(
+-              title: "2. Pawn Structures & Weaknesses",
+-              description: "Understand isolated, doubled, and backward pawns and how to exploit them in the endgame.",
+-              onTap: () {
+-                setState(() {
+-                  state.lastCommentary = "Solomon: Pawns are the soul of chess. Look for doubled pawns to attack!";
+-                  _activeScreen = AppScreen.play;
+-                });
+-              },
+-            ),
+-            _buildLearnLessonCard(
+-              title: "3. Tactical Outposts",
+-              description: "Position your knights on active squares where pawns cannot chase them away.",
+-              onTap: () {
+-                setState(() {
+-                  state.lastCommentary = "Solomon: Outposts make Knights extremely strong. Look for f5 or d5 outposts today.";
+-                  _activeScreen = AppScreen.play;
+-                });
+-              },
+-            ),
+-          ],
+-        );
+-    }
+-  }
+-
+-  Widget _buildLearnLessonCard({required String title, required String description, required VoidCallback onTap}) {
+-    return ArguuuCard(
+-      margin: const EdgeInsets.only(bottom: 12),
+-      onTap: onTap,
+-      child: Column(
+-        crossAxisAlignment: CrossAxisAlignment.start,
+-        children: [
+-          Text(title, style: AppFonts.serif(fontSize: 16, fontWeight: FontWeight.bold, color: AppColors.copper)),
+-          const SizedBox(height: 6),
+-          Text(description, style: AppFonts.sans(fontSize: 13, color: AppColors.textMain, height: 1.3)),
+-        ],
+-      ),
+-    );
++    }
+   }
+ ```
+
+Auto-Trigger AI Move on App Load/Resume:
+- Fixed the issue where pieces become permanently unmovable if the app is restarted or resumed during the AI's turn. Added an check at the end of `loadState()` in `lib/chess_game_state.dart` to automatically trigger `triggerAiMove()` if the loaded match state is currently the AI's turn and side selection is already completed.
+
+Git Diffs:
+```diff
+diff --git a/lib/chess_game_state.dart b/lib/chess_game_state.dart
+--- a/lib/chess_game_state.dart
++++ b/lib/chess_game_state.dart
+@@ -519,6 +519,10 @@
+       
+       _updateStatusMessage();
+       notifyListeners();
++
++      if (!isPendingSideSelection && isAiTurn && !isThinking) {
++        triggerAiMove();
++      }
+     } catch (e) {
+       // SharedPreferences failsafe
+     }
+```
+
+Chess.com-style Moves History Tab, Game Review Button, & Quick Move Stats:
+- Implemented Move History Tab with SAN move notation, time spent progress bars, and navigation controls (|<, <, Live, >, >|) that sync with board states.
+- Implemented Quick Move Stats tracking (Best moves, Misses, Mistakes) using move-evaluation logic comparing actual move delta vs engine recommendation.
+- Added Game Review button to the custom styled warm cream ChessComResultModal dialog to trigger complete step-by-step game review mode.
+
+Git Diffs:
+```diff
+diff --git a/lib/chess_game_state.dart b/lib/chess_game_state.dart
+--- a/lib/chess_game_state.dart
++++ b/lib/chess_game_state.dart
+@@ -1223,33 +1223,55 @@
+-  void showMatchOverDialog(BuildContext context, {Map<String, int>? eloRes}) {
+-    String msg = gameStatusMessage;
+-    if (eloRes != null) {
+-      int oldElo = eloRes['old']!;
+-      int newElo = eloRes['new']!;
+-      int change = eloRes['change']!;
+-      String changeSign = change >= 0 ? '+' : '';
+-      msg += "\n\n$currentCoach's Rating: ${opponentElos[aiDifficulty]} ELO"
+-             "\nYour Rating: $oldElo → $newElo ($changeSign$change ELO)";
+-    }
+-    showDialog(
+-      context: context,
+-      barrierDismissible: false,
+-      builder: (BuildContext context) {
+-        return ArguuuConfirmDialog(
+-          title: 'Game Over',
+-          message: msg,
+-          yesLabel: 'New Game',
+-          noLabel: 'Close',
+-          isDanger: false,
+-          onYes: () {
+-            resetGame();
+-            Navigator.of(context).pop();
+-          },
+-          onNo: () => Navigator.of(context).pop(),
+-        );
+-      },
+-    );
+-  }
++  void showMatchOverDialog(BuildContext context, {Map<String, int>? eloRes}) {
++    final int best     = statBest;
++    final int misses   = statMisses;
++    final int mistakes = statMistakes;
++    final int newElo   = eloRes?['new'] ?? userElo;
++    final int eloChange = eloRes?['change'] ?? 0;
++    // ... displays custom ChessComResultModal modal dialog with Game Review and Stats details
++  }
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -841,2 +841,4 @@
+                 const SizedBox(height: 24),
++                MoveHistoryPanel(state: state),
++                const SizedBox(height: 24),
+```
+
+Moves History Tab Landscape Restriction:
+- Restricted the MoveHistoryPanel rendering to landscape/horizontal mode only, ensuring the chessboard is completely visible in portrait/vertical mode.
+- Cleaned up portrait scroll space to prevent viewport overflows.
+
+Git Diffs:
+```diff
+diff --git a/lib/main.dart b/lib/main.dart
+--- a/lib/main.dart
++++ b/lib/main.dart
+@@ -841,4 +841,2 @@
+                 const SizedBox(height: 24),
+-                MoveHistoryPanel(state: state),
+-                const SizedBox(height: 24),
+```
+
+Coach Personalities Renaming:
+- Renamed all 16 MBTI personality coaches to their new unique character names:
+  - INTP -> Priya
+  - INTJ -> Nadia
+  - ENTP -> Selene
+  - ENTJ -> Damien
+  - INFP -> Kaelen
+  - INFJ -> Willow
+  - ENFP -> Mira
+  - ENFJ -> Rowan
+  - ISTJ -> Julian
+  - ISFJ -> Hana
+  - ESTJ -> Zara
+  - ESFJ -> Theo
+  - ISTP -> Finn
+  - ISFP -> Sunny
+  - ESTP -> Chase
+  - ESFP -> Camila
+- Renamed the corresponding profile image asset PNG files under `assets/mbti_coaches/` to match their new names.
+- Updated default active coach, preferences fallbacks, and content banks in `lib/chess_game_state.dart` and `lib/coach_personality.dart`.
+
+Git Diffs:
+```diff
+diff --git a/lib/chess_game_state.dart b/lib/chess_game_state.dart
+--- a/lib/chess_game_state.dart
++++ b/lib/chess_game_state.dart
+@@ -20,7 +20,7 @@
+-  String currentCoach = 'INTP';
++  String currentCoach = 'Priya';
+   final List<String> mbtiCoaches = [
+-    'INTP', 'INTJ', 'ENTP', 'ENTJ',
+-    ...
++    'Priya', 'Nadia', 'Selene', 'Damien',
++    ...
+```

@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-mkdir.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-download.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-update.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-patch.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-copyfile.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-configure.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-build.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-install.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\727baeabd14fa58aba36c3bf943de8f9\nuget-populate-test.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\22522e5e7bfa32755f6aa4fb29894f92\nuget-populate-complete.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\b6df04eb77b161579d7652461866c911\nuget-populate.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+    <CustomBuild Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="C:\Code\Personal Projects\LearnChessWithWali\build\windows\x64\_deps\nuget-subbuild\CMakeFiles\nuget-populate" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{CDBC24BD-5E50-3475-A41C-48C28FB4D271}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

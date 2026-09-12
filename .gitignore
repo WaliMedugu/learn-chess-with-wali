@@ -1,0 +1,10 @@
+node_modules/
+.dart_tool/
+build/
+windows/flutter/ephemeral/
+*.apk
+*.dill
+*.pdb
+*.so
+.cache/
+.env

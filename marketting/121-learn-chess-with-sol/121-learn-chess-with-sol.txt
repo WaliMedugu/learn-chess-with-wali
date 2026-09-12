@@ -1,0 +1,20 @@
+✨ Build in Public: Day 1... Episode 1 ✨
+.
+Most chess apps feel incredibly sterile. You play against a faceless computer engine, make a mistake, and get a cold red warning or an ELO drop without really understanding why.
+
+I wanted to build something different... something that feels like sitting across from a real, slightly dramatic, and incredibly encouraging coach.
+
+Meet Learn Chess with Sol: a premium Flutter chess app designed to make learning chess interactive, visual, and genuinely fun 🙂
+
+Here is a sneak peek at what is ready for Day 1. Check the visual poster details !!!!
+
+✨ Dynamic Chess Coach Sol: Sol does not just play, he reacts !!!! He spots classic openings like the Sicilian or Caro Kann, gasps when his queen is threatened, and guides you gently when you leave a piece undefended.
+✨ Visual Dashboard: ELO progression sparklines and animated win rate rings computed dynamically.
+✨ Interactive Training Academy: A gamified 4 phase practice academy with active board correction and FEN validators.
+✨ Custom ELO Engine: A rating engine with persistent match history and variable difficulty levels.
+
+I am building this completely in public, sharing the highs, the bugs, and the feature designs 🙈
+
+What is one feature you think every modern chess training app is missing? Let me know in the comments 🙂
+
+#BuildInPublic #Flutter #IndieHackers #ChessApp #DeveloperLife #SystemsDesign #WaliMedugu

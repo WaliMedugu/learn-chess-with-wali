@@ -1,0 +1,15 @@
+# Target labels
+ nuget-populate
+# Source files and their labels
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/nuget-populate
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/b6df04eb77b161579d7652461866c911/nuget-populate.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/22522e5e7bfa32755f6aa4fb29894f92/nuget-populate-complete.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-build.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-configure.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-copyfile.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-download.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-install.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-mkdir.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-patch.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-test.rule
+C:/Code/Personal Projects/LearnChessWithWali/build/windows/x64/_deps/nuget-subbuild/CMakeFiles/727baeabd14fa58aba36c3bf943de8f9/nuget-populate-update.rule
